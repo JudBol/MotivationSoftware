@@ -150,12 +150,26 @@ async def vibeAtPower( vibe_power : float ) -> None: #doing the whole connection
     print("\nAll done!")
     await client.disconnect()
 
-async def vibeAtPowerExperiment(vibe_power: float) -> None:  # doing the whole connection/disconnect thing
+async def vibeAtPowerExperiment(client, vibe_power: float) -> None:  # without doing the whole connection/disconnect thing
+    # Control each device based on its capabilities
+    for device in client.devices.values():
+        print(f"\nControlling: {device.name}")
 
-    client = ButtplugClient("Device Control Example")
+        # Vibration
+        if device.has_output(OutputType.VIBRATE):
+            vibe_power = await limitVibe(vibe_power)
+            print(f"  Starting vibration at {vibe_power * 100}%...")
+
+            await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, vibe_power))
+
+
+async def initialiseClient():
+    client = ButtplugClient("Motivation Software")
+    print("Initialising ...")
 
     # Set up event handlers to see devices as they connect
     client.on_device_added = lambda d: print(f"Device connected: {d.name}")
+
     client.on_device_removed = lambda d: print(f"Device disconnected: {d.name}")
 
     print("Connecting to server...")
@@ -171,37 +185,32 @@ async def vibeAtPowerExperiment(vibe_power: float) -> None:  # doing the whole c
         await client.disconnect()
         return
 
-    # Control each device based on its capabilities
     for device in client.devices.values():
+        battery = await device.battery()
         print(f"\nControlling: {device.name}")
+        print(f"    Battery: {battery * 100}%")
 
-        # Vibration
-        if device.has_output(OutputType.VIBRATE):
-            vibe_power = await limitVibe(vibe_power)
-            print(f"  Starting vibration at {vibe_power * 100}%...")
+    print("\nInitialising complete")
+    return client
 
-            await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, vibe_power))
+async def endSession(client): #disconnects client
 
-            battery = await device.battery()
-            print(f"  Battery: {battery * 100}%")
-
-            await asyncio.sleep(1)
-
-        # Stop the device
+    for device in client.devices.values():
         print("  Stopping device...")
         await device.stop()
 
     print("\nAll done!")
     await client.disconnect()
 
+async def customFunction():
+    client =  await initialiseClient()
 
+    await vibeAtPowerExperiment(client, 0.5)
 
-def vibrateAtPower(vibePower : float ) -> None:
-    asyncio.run(vibeAtPower(vibePower))
+    await asyncio.sleep(5)
 
-def vibrateAtPowerExperimental(vibePower: float) -> None:
-    asyncio.run(vibeAtPowerExperiment(vibePower))
+    await endSession(client)
 
 
 if __name__ == "__main__":
-    vibrateAtPower(0.5)
+    asyncio.run(customFunction())

@@ -14,8 +14,8 @@ Welcome to the Motivation Software graphical interface!
 
     input("Press enter to continue...")
 
-    #testVibrate()
-    vibrateAtPower(0.5)
+
+    asyncio.run(customFunction())
 
 if __name__ == "__main__":
     main()

@@ -23,7 +23,7 @@ def on_test_vibrate_button_click(btn):
         # Safely submit the async coroutine to the running background loop.
         # This returns instantly, meaning your GUI never freezes!
         asyncio.run_coroutine_threadsafe(
-            vibeAtPowerExperiment(client,0.5), background_loop
+            vibeAtPowerExperiment(0.5), background_loop
         )
 
     else:
@@ -47,7 +47,22 @@ def client_start(request_btn, control_btn):
     control_btn.configure(text="Starting server")
     control_btn.configure(state="active")
 
-def main(background_loop):
+def stop_devices_button():
+
+    if background_loop and background_loop.is_running():
+        # Safely submit the async coroutine to the running background loop.
+        # This returns instantly, meaning your GUI never freezes!
+        print("Starting Client...")
+        asyncio.run_coroutine_threadsafe(
+            stopDevices(), background_loop
+        )
+        print("Client Start Requested")
+
+    else:
+        print("Error: Background loop is not running.")
+
+
+def main():
     print("Application Started")
     print("""
 ========================================================
@@ -67,14 +82,19 @@ Welcome to the Motivation Software graphical interface!
 
 
     # The button triggers the synchronous wrapper function too
-    # test_vibrate_btn = tk.Button(root, text="press start", state="disabled",
-    #                              command=lambda: on_test_vibrate_button_click(test_vibrate_btn))
+    test_vibrate_btn = tk.Button(root, text="press start", state="disabled",
+                                 command=lambda: on_test_vibrate_button_click(test_vibrate_btn))
 
-    quit_Button = tk.Button(root, text="Exit", command=root.destroy)
+    off_vibrate_btn = tk.Button(root, text="stop devices", state="active",
+                                command=lambda: stop_devices_button())
+
+    quit_button = tk.Button(root, text="Exit", command=root.destroy)
 
     request_client_btn.pack(pady=1)
-    #test_vibrate_btn.pack(pady=1)
-    quit_Button.pack(pady=1)
+    test_vibrate_btn.pack(pady=1)
+    off_vibrate_btn.pack(pady=1)
+    quit_button.pack(pady=1)
+
 
 
 
@@ -85,4 +105,4 @@ Welcome to the Motivation Software graphical interface!
     root.mainloop()
 
 if __name__ == "__main__":
-    main(background_loop)
+    main()

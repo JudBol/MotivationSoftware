@@ -20,76 +20,76 @@ import asyncio
 from buttplug import ButtplugClient, DeviceOutputCommand, OutputType
 
 
-async def main() -> None:   #reference code i will draw form
-    client = ButtplugClient("Device Control Example")
-
-    # Set up event handlers to see devices as they connect
-    client.on_device_added = lambda d: print(f"Device connected: {d.name}")
-    client.on_device_removed = lambda d: print(f"Device disconnected: {d.name}")
-
-    print("Connecting to server...")
-    await client.connect("ws://127.0.0.1:12345")
-
-    print("Scanning for devices (5 seconds)...")
-    await client.start_scanning()
-    await asyncio.sleep(5)
-    await client.stop_scanning()
-
-    if not client.devices:
-        print("No devices found!")
-        await client.disconnect()
-        return
-
-    # Control each device based on its capabilities
-    for device in client.devices.values():
-        print(f"\nControlling: {device.name}")
-
-        # Vibration
-        if device.has_output(OutputType.VIBRATE):
-            print("  Starting vibration at 25%...")
-            await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, 0.25))
-            await asyncio.sleep(1)
-
-            print("  Increasing to 50%...")
-            await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, 0.5))
-            await asyncio.sleep(1)
-
-            print("  Full power (100%)...")
-            await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, 1.0))
-            await asyncio.sleep(1)
-
-        # Rotation
-        if device.has_output(OutputType.ROTATE):
-            print("  Rotating at 50%...")
-            await device.run_output(DeviceOutputCommand(OutputType.ROTATE, 0.5))
-            await asyncio.sleep(2)
-
-        # Position (strokers/linear devices)
-        if device.has_output(OutputType.POSITION_WITH_DURATION):
-            print("  Moving to top position...")
-            await device.run_output(
-                DeviceOutputCommand(OutputType.POSITION_WITH_DURATION, 1.0, duration=500)
-            )
-            await asyncio.sleep(1)
-
-            print("  Moving to bottom position...")
-            await device.run_output(
-                DeviceOutputCommand(OutputType.POSITION_WITH_DURATION, 0.0, duration=500)
-            )
-            await asyncio.sleep(1)
-
-            print("  Moving to middle...")
-            await device.run_output(
-                DeviceOutputCommand(OutputType.POSITION_WITH_DURATION, 0.5, duration=250)
-            )
-            await asyncio.sleep(1)
-
-        # Stop the device
-        print("  Stopping device...")
-        await device.stop()
-
-    print("\nAll done!")
-    await client.disconnect()
+# async def main() -> None:   #reference code i will draw form
+#     client = ButtplugClient("Device Control Example")
+#
+#     # Set up event handlers to see devices as they connect
+#     client.on_device_added = lambda d: print(f"Device connected: {d.name}")
+#     client.on_device_removed = lambda d: print(f"Device disconnected: {d.name}")
+#
+#     print("Connecting to server...")
+#     await client.connect("ws://127.0.0.1:12345")
+#
+#     print("Scanning for devices (5 seconds)...")
+#     await client.start_scanning()
+#     await asyncio.sleep(5)
+#     await client.stop_scanning()
+#
+#     if not client.devices:
+#         print("No devices found!")
+#         await client.disconnect()
+#         return
+#
+#     # Control each device based on its capabilities
+#     for device in client.devices.values():
+#         print(f"\nControlling: {device.name}")
+#
+#         # Vibration
+#         if device.has_output(OutputType.VIBRATE):
+#             print("  Starting vibration at 25%...")
+#             await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, 0.25))
+#             await asyncio.sleep(1)
+#
+#             print("  Increasing to 50%...")
+#             await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, 0.5))
+#             await asyncio.sleep(1)
+#
+#             print("  Full power (100%)...")
+#             await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, 1.0))
+#             await asyncio.sleep(1)
+#
+#         # Rotation
+#         if device.has_output(OutputType.ROTATE):
+#             print("  Rotating at 50%...")
+#             await device.run_output(DeviceOutputCommand(OutputType.ROTATE, 0.5))
+#             await asyncio.sleep(2)
+#
+#         # Position (strokers/linear devices)
+#         if device.has_output(OutputType.POSITION_WITH_DURATION):
+#             print("  Moving to top position...")
+#             await device.run_output(
+#                 DeviceOutputCommand(OutputType.POSITION_WITH_DURATION, 1.0, duration=500)
+#             )
+#             await asyncio.sleep(1)
+#
+#             print("  Moving to bottom position...")
+#             await device.run_output(
+#                 DeviceOutputCommand(OutputType.POSITION_WITH_DURATION, 0.0, duration=500)
+#             )
+#             await asyncio.sleep(1)
+#
+#             print("  Moving to middle...")
+#             await device.run_output(
+#                 DeviceOutputCommand(OutputType.POSITION_WITH_DURATION, 0.5, duration=250)
+#             )
+#             await asyncio.sleep(1)
+#
+#         # Stop the device
+#         print("  Stopping device...")
+#         await device.stop()
+#
+#     print("\nAll done!")
+#     await client.disconnect()
 
 """
 from here on is my own code
@@ -99,59 +99,63 @@ yes it will be rough lmao
 
 imma add it so that it's continuous in terms of vibes, ie the vibe doesnt disconnect until later
 """
-def testVibrate() -> None:
-    asyncio.run(main())
 
-async def limitVibe(invibe): #limits inputs to between 0 and 1 #check me for when things break/get slow
-    return min(max(invibe, 0), 1)
+# def testVibrate() -> None:
+#     asyncio.run(main())
+
+client = None
+
+async def limitVibe(in_vibe): #limits inputs to between 0 and 1 #check me for when things break/get slow
+    return min(max(in_vibe, 0), 1)
 
 
-async def vibeAtPower( vibe_power : float ) -> None: #doing the whole connection/disconnect thing
+# async def vibeAtPower( vibe_power : float ) -> None: #doing the whole connection/disconnect thing
+#     global client
+#     client = ButtplugClient("Device Control Example")
+#
+#     # Set up event handlers to see devices as they connect
+#     client.on_device_added = lambda d: print(f"Device connected: {d.name}")
+#     client.on_device_removed = lambda d: print(f"Device disconnected: {d.name}")
+#
+#     print("Connecting to server...")
+#     await client.connect("ws://127.0.0.1:12345")
+#
+#     print("Scanning for devices (5 seconds)...")
+#     await client.start_scanning()
+#     await asyncio.sleep(5)
+#     await client.stop_scanning()
+#
+#     if not client.devices:
+#         print("No devices found!")
+#         await client.disconnect()
+#         return
+#
+#     # Control each device based on its capabilities
+#     for device in client.devices.values():
+#         print(f"\nControlling: {device.name}")
+#
+#         # Vibration
+#         if device.has_output(OutputType.VIBRATE):
+#             vibe_power = await limitVibe(vibe_power)
+#             print(f"  Starting vibration at {vibe_power*100}%...")
+#
+#             await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, vibe_power))
+#
+#             battery = await device.battery()
+#             print(f"  Battery: {battery*100}%")
+#
+#             await asyncio.sleep(1)
+#
+#         # Stop the device
+#         print("  Stopping device...")
+#         await device.stop()
+#
+#     print("\nAll done!")
+#     await client.disconnect()
 
-    client = ButtplugClient("Device Control Example")
-
-    # Set up event handlers to see devices as they connect
-    client.on_device_added = lambda d: print(f"Device connected: {d.name}")
-    client.on_device_removed = lambda d: print(f"Device disconnected: {d.name}")
-
-    print("Connecting to server...")
-    await client.connect("ws://127.0.0.1:12345")
-
-    print("Scanning for devices (5 seconds)...")
-    await client.start_scanning()
-    await asyncio.sleep(5)
-    await client.stop_scanning()
-
-    if not client.devices:
-        print("No devices found!")
-        await client.disconnect()
-        return
-
+async def vibeAtPowerExperiment(vibe_power: float) -> None:  # without doing the whole connection/disconnect thing
     # Control each device based on its capabilities
-    for device in client.devices.values():
-        print(f"\nControlling: {device.name}")
-
-        # Vibration
-        if device.has_output(OutputType.VIBRATE):
-            vibe_power = await limitVibe(vibe_power)
-            print(f"  Starting vibration at {vibe_power*100}%...")
-
-            await device.run_output(DeviceOutputCommand(OutputType.VIBRATE, vibe_power))
-
-            battery = await device.battery()
-            print(f"  Battery: {battery*100}%")
-
-            await asyncio.sleep(1)
-
-        # Stop the device
-        print("  Stopping device...")
-        await device.stop()
-
-    print("\nAll done!")
-    await client.disconnect()
-
-async def vibeAtPowerExperiment(client, vibe_power: float) -> None:  # without doing the whole connection/disconnect thing
-    # Control each device based on its capabilities
+    global client
     for device in client.devices.values():
         print(f"\nControlling: {device.name}")
 
@@ -164,6 +168,7 @@ async def vibeAtPowerExperiment(client, vibe_power: float) -> None:  # without d
 
 
 async def initialiseClient():
+    global client
     client = ButtplugClient("Motivation Software")
     print("Initialising ...")
 
@@ -191,10 +196,10 @@ async def initialiseClient():
         print(f"    Battery: {battery * 100}%")
 
     print("\nInitialising complete")
-    return client
 
-async def endSession(client): #disconnects client
 
+async def endSession(): #disconnects client
+    global client
     for device in client.devices.values():
         print("  Stopping device...")
         await device.stop()
@@ -202,14 +207,21 @@ async def endSession(client): #disconnects client
     print("\nAll done!")
     await client.disconnect()
 
-async def customFunction():
-    client =  await initialiseClient()
+async def stopDevices():
 
-    await vibeAtPowerExperiment(client, 0.5)
+    global client
+    for device in client.devices.values():
+        print("  Stopping device...")
+        await device.stop()
+
+async def customFunction():
+    await initialiseClient()
+
+    await vibeAtPowerExperiment(0.5)
 
     await asyncio.sleep(5)
 
-    await endSession(client)
+    await endSession()
 
 
 if __name__ == "__main__":

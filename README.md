@@ -19,7 +19,7 @@ d tasks I needa get done asap:
 2) get gui existing
     -mainly seeing statuses, emergency stop etc. probably in tkinter (save my soul)  
 2.5) cry getting async to work with non-async menu - *cries in threading*
-3) get some form of "am i coding?" going
+3) get some form of "am i coding?" going  
     -open cv, a keystroke device etc... ***this will be the controversial one oml
 
 after that...

@@ -16,7 +16,7 @@ might CONSIDER a lockbox integration for those interested on keeping the cookie 
 d tasks I needa get done asap:  
 1) ~~get the vibes going~~  
     -need basic control over connected devices in request |✔|
-2) ~~get gui existing~~
+2) ~~get gui existing~~  
     -mainly seeing statuses, emergency stop etc. probably in tkinter (save my soul)  
 2.5) cry getting async to work with non-async menu - *cries in threading* |✔|
 3) get some form of "am i coding?" going  

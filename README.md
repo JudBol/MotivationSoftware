@@ -1,8 +1,8 @@
 ### MOTIVATION SOFTWARE
 I like coding. I like vibrators/sextech.
-Ta-daaah, vibrators and sextech!
+Ta-daaah, vibrators, coding and sextech!
 
-Uses [buttplugio](https://buttplug.io/) for controlling the "good vibes"
+Uses [buttplugio](https://buttplug.io/) for controlling the "good vibes".  
 Planning on using opencv to check if you are coding goodly
 
 .... yeah no I won't add a punishment for not coding

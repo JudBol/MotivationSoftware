@@ -1,3 +1,5 @@
+from toyControl import *
+
 def main():
     print("Application Started")
     print("""
@@ -11,7 +13,9 @@ Welcome to the Motivation Software graphical interface!
 """)
 
     input("Press enter to continue...")
-    exit()
+
+
+    asyncio.run(customFunction())
 
 if __name__ == "__main__":
     main()
